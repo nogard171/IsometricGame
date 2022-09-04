@@ -8,7 +8,7 @@ import java.awt.Point;
 
 public class GameInput implements InputProcessor {
     public static int[] mouseButtonCount;
-    private static Point mousePosition;
+    private static Point mousePosition = new Point(0,0);
     private static boolean[] mouseButtons;
     private static boolean[] mouseDraggedButtons;
     private static int lastMouseButton = -1;
@@ -67,7 +67,11 @@ public class GameInput implements InputProcessor {
     }
 
     public static Point getMousePosition() {
-        return mousePosition;
+        return new Point(Gdx.input.getX(),Gdx.input.getY());
+    }
+
+    public static Point getInvertMousePosition() {
+        return new Point(Gdx.input.getX(),Gdx.graphics.getHeight()-Gdx.input.getY());
     }
 
     public static boolean isKeyPressed(int k) {

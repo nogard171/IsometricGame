@@ -42,6 +42,8 @@ public class Database {
         textureData.put("tree0",new TextureRegion(textureMap, 0,64*2,64,128));
         textureData.put("maple_tree0",new TextureRegion(textureMap, 64,64*2,64,128));
         textureData.put("bush0",new TextureRegion(textureMap, 64*2,0,64,128));
+
+
     }
     public static void cleanup()
     {

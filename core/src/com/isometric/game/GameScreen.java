@@ -11,7 +11,10 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.isometric.core.ChunkManager;
 import com.isometric.core.GameInput;
+import com.isometric.core.Panel;
 import com.isometric.util.Debug;
+
+import java.awt.Point;
 
 public class GameScreen implements Screen {
     final GameLogic game;
@@ -62,12 +65,6 @@ public class GameScreen implements Screen {
         float speed = 1 * delta;
         speed *= 1000;
 
-        if (GameInput.isMouseDragged(Input.Buttons.LEFT)) {
-            System.out.println("Mouse Dragged" );
-        }
-        if (GameInput.isMouseReleased(Input.Buttons.LEFT)) {
-            System.out.println("Mouse Released" );
-        }
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             this.game.camera.translate(new Vector2(-speed, 0));
         }
@@ -141,7 +138,11 @@ public class GameScreen implements Screen {
     }
 
     Vector3 getMousePosInGameWorld() {
-        return game.camera.unproject(new Vector3(GameInput.getMousePosition().x,GameInput.getMousePosition().y, 0));
+        Point mouse = GameInput.getMousePosition();
+        if(mouse!=null) {
+            return game.camera.unproject(new Vector3(mouse.x, mouse.y, 0));
+        }
+        return new Vector3(-1,-1,-1);
     }
 
     private void getHover() {
