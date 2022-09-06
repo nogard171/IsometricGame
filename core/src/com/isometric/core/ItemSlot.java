@@ -4,8 +4,6 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
-import java.awt.Point;
-
 public class ItemSlot {
     Vector2 position = new Vector2(0, 0);
     Panel itemBackground;
@@ -13,7 +11,7 @@ public class ItemSlot {
     private int itemCount = 0;
 
     public ItemSlot() {
-        itemBackground = new Panel("icon", new Point(32, 32));
+        itemBackground = new Panel("icon", new Vector2(32, 32));
     }
 
     public void setPosition(Vector2 newPosition) {

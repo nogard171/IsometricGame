@@ -12,7 +12,7 @@ public class ChunkManager {
     public int chunksRendered = 0;
     HashMap<Vector2, Chunk> chunkHashMap = new HashMap<>();
     LinkedList<Chunk> chunksToRender = new LinkedList<Chunk>();
-    int viewDistance = 2;
+    int viewDistance = 3;
     Vector2 previousView = new Vector2(-100, -100);
 
     public void setup() {

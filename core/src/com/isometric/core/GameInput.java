@@ -1,20 +1,19 @@
 package com.isometric.core;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
-
-import java.awt.Point;
+import com.badlogic.gdx.math.Vector2;
 
 public class GameInput implements InputProcessor {
     public static int[] mouseButtonCount;
-    private static Point mousePosition = new Point(0,0);
+    private static Vector2 mousePosition = new Vector2(0, 0);
     private static boolean[] mouseButtons;
     private static boolean[] mouseDraggedButtons;
     private static int lastMouseButton = -1;
-
     private static boolean[] keys;
     private static int[] keysCount;
+    private static Vector2 mouseScroll = new Vector2(0, 0);
+    private static int mouseScrollCount = 0;
 
     public GameInput() {
         poll();
@@ -25,6 +24,10 @@ public class GameInput implements InputProcessor {
             mouseButtons = new boolean[5];
             mouseButtonCount = new int[5];
             mouseDraggedButtons = new boolean[5];
+        }
+        if (!mouseScroll.equals(new Vector2(0, 0))) {
+            mouseScrollCount = 0;
+            mouseScroll = new Vector2(0, 0);
         }
         if (keys == null) {
             keys = new boolean[255];
@@ -66,16 +69,24 @@ public class GameInput implements InputProcessor {
         return lastMouseButton;
     }
 
-    public static Point getMousePosition() {
-        return new Point(Gdx.input.getX(),Gdx.input.getY());
+    public static Vector2 getMousePosition() {
+        return new Vector2(Gdx.input.getX(), Gdx.input.getY());
     }
 
-    public static Point getInvertMousePosition() {
-        return new Point(Gdx.input.getX(),Gdx.graphics.getHeight()-Gdx.input.getY());
+    public static Vector2 getInvertMousePosition() {
+        return new Vector2(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
     }
 
     public static boolean isKeyPressed(int k) {
         return (keysCount[k] == 0 ? keys[k] : false);
+    }
+
+    public static boolean isKeyDown(int k) {
+        return keys[k];
+    }
+
+    public static Vector2 getMouseScroll() {
+        return mouseScroll;
     }
 
     @Override
@@ -125,12 +136,16 @@ public class GameInput implements InputProcessor {
 
     @Override
     public boolean mouseMoved(int screenX, int screenY) {
-        mousePosition = new Point(screenX, screenY);
+        mousePosition = new Vector2(screenX / 2, screenY / 2);
         return false;
     }
 
     @Override
     public boolean scrolled(float amountX, float amountY) {
+        if (mouseScrollCount == 0) {
+            mouseScroll = new Vector2(amountX, amountY);
+            mouseScrollCount++;
+        }
         return false;
     }
 }

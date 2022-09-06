@@ -14,8 +14,6 @@ import com.isometric.core.GameInput;
 import com.isometric.core.Panel;
 import com.isometric.util.Debug;
 
-import java.awt.Point;
-
 public class GameScreen implements Screen {
     final GameLogic game;
     private final BitmapFont font;
@@ -55,8 +53,8 @@ public class GameScreen implements Screen {
         game.camera.update();
         game.uiCamera.viewportWidth = width;
         game.uiCamera.viewportHeight = height;
-        game.uiCamera.position.x = width / 2;
-        game.uiCamera.position.y = height / 2;
+        game.uiCamera.position.x = (width / 2);
+        game.uiCamera.position.y = (height / 2);
         game.uiCamera.update();
         checkInitIndex();
     }
@@ -64,6 +62,7 @@ public class GameScreen implements Screen {
     public void update(float delta) {
         float speed = 1 * delta;
         speed *= 1000;
+        speed *= game.camera.zoom;
 
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             this.game.camera.translate(new Vector2(-speed, 0));
@@ -79,13 +78,27 @@ public class GameScreen implements Screen {
         if (Gdx.input.isKeyPressed(Input.Keys.S)) {
             this.game.camera.translate(new Vector2(0, -speed));
         }
+
+        Vector2 scroll = GameInput.getMouseScroll();
+        if (!scroll.equals(Vector2.Zero)) {
+            Vector2 temp =  new Vector2(GameInput.getInvertMousePosition().x-game.uiCamera.position.x ,GameInput.getInvertMousePosition().y-game.uiCamera.position.y);
+            game.uiCamera.position.x = GameInput.getInvertMousePosition().x;
+            game.uiCamera.position.y = GameInput.getInvertMousePosition().y;
+            game.camera.update();
+            if (game.camera.zoom >= 0.5f && scroll.y < 0) {
+                game.camera.zoom -= 0.1f;
+            } else if (game.camera.zoom <= 1.5f && scroll.y > 0) {
+                game.camera.zoom += 0.1f;
+            }
+        }
+        //game.camera.zoom = 0.5f;
         game.camera.update();
         chunkMgr.update(viewChunkIndex);
         ui.update();
 
 
         Debug.setDebug("FPS", Gdx.graphics.getFramesPerSecond() + "");
-        Debug.setDebug("Mouse", getMousePosInGameWorld() + "");
+        Debug.setDebug("Mouse", GameInput.getInvertMousePosition() + "");
         Debug.setDebug("Index", hoverIndex + "");
         Debug.setDebug("Chunk Index", hoverChunkIndex + "");
         GameInput.poll();
@@ -138,11 +151,11 @@ public class GameScreen implements Screen {
     }
 
     Vector3 getMousePosInGameWorld() {
-        Point mouse = GameInput.getMousePosition();
-        if(mouse!=null) {
+        Vector2 mouse = GameInput.getMousePosition();
+        if (mouse != null) {
             return game.camera.unproject(new Vector3(mouse.x, mouse.y, 0));
         }
-        return new Vector3(-1,-1,-1);
+        return new Vector3(-1, -1, -1);
     }
 
     private void getHover() {

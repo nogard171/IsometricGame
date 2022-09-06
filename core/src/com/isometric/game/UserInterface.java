@@ -18,6 +18,12 @@ public class UserInterface {
         if (GameInput.isKeyPressed(Input.Keys.F1)) {
             showDebug = !showDebug;
         }
+        if (GameInput.isKeyPressed(Input.Keys.I)) {
+            inventory.toggle();
+        }
+        if (GameInput.isKeyDown(Input.Keys.NUM_1)) {
+            PlayerDatabase.addCopper(123);
+        }
         inventory.update();
     }
 
