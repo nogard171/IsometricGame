@@ -6,12 +6,11 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.isometric.core.Clickable;
 import com.isometric.core.GameInput;
+import com.isometric.core.Item;
 import com.isometric.core.ItemSlot;
-import com.isometric.core.Panel;
 
 import java.util.HashMap;
 
@@ -35,6 +34,14 @@ public class Inventory {
     private HashMap<Vector2, ItemSlot> itemSlots = new HashMap<>();
 
     public void setup() {
+        for (int i = 0; i < 43; i++) {
+            Item item3 = new Item();
+            item3.name = "stone";
+            item3.count = 1;
+            PlayerDatabase.addItem(item3);
+        }
+        System.out.println("test:" + PlayerDatabase.items.size());
+
 
         goldCoinTexture = new Texture("user interface/gold_coin_icon.png");
         silverCoinTexture = new Texture("user interface/silver_coin_icon.png");
@@ -160,6 +167,39 @@ public class Inventory {
             if (PlayerDatabase.gold > 0) {
                 batch.draw(goldCoinTexture, panelClickable.getPosition().x + panelTexture.getWidth() - 97, panelClickable.getPosition().y + 15);
                 font.draw(batch, "" + PlayerDatabase.gold, panelClickable.getPosition().x + panelTexture.getWidth() - (PlayerDatabase.gold > 9 ? 115 : 108), panelClickable.getPosition().y + 29);
+            }
+
+/*
+            Bag selectedBag = PlayerDatabase.bags.get(this.selectedBag);
+            if (selectedBag != null) {
+                int tempX = 0;
+                int tempY = 0;
+                for (Item i : selectedBag.items) {
+                    batch.draw(new Texture("user interface/stone_item.png"), panelClickable.getPosition().x + 16 + (tempX * 48), panelClickable.getPosition().y + panelClickable.getBounds().height - 64 - (tempY * 48));
+                    if (tempX == 4) {
+                        tempX = 0;
+                        tempY++;
+                    }
+                    tempX++;
+                }
+            }
+*/
+
+            int tempX = 0;
+            int tempY = 0;
+            for (int i = 20 * this.selectedBag; i < ((20 * this.selectedBag) + 20) ; i++){
+                if (PlayerDatabase.items.size() > i) {
+                    Item item = PlayerDatabase.items.get(i);
+                    if (item != null) {
+                        batch.draw(Database.textures.get("stone_item"), panelClickable.getPosition().x + 16 + (tempX * 48), panelClickable.getPosition().y + panelClickable.getBounds().height - 64 - (tempY * 48));
+                    }
+                }
+                if (tempX >= 4) {
+                    tempX = 0;
+                    tempY++;
+                } else {
+                    tempX++;
+                }
             }
         }
     }

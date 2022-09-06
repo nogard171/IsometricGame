@@ -18,6 +18,7 @@ public class Database {
 
         textures = new HashMap<String, Texture>();
         textures.put("hover",new Texture("terrain/hover.png"));
+        textures.put("stone_item",new Texture("user interface/stone_item.png"));
 
         uiTextureMap  =new Texture("user interface/tileset.png");
         textureData.put("panel_0,0",new TextureRegion(uiTextureMap, 0,0,2,2));
